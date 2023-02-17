@@ -23,6 +23,7 @@ export default function UserPage() {
   const postId = router.query.postId as string;
 
   const { data, isLoading, isError } = useQuery({
+    enabled: Boolean(postId),
     queryKey: ['posts', postId],
     queryFn: () => getPosts(postId),
   });

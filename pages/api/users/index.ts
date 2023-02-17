@@ -3,7 +3,7 @@ import { db } from '~/src/store/store';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { name, email } = req.body;
+    const { name, email } = JSON.parse(req.body);
 
     if (!name || !email) {
       res.status(400).json({ error: 'Missing name or email' });

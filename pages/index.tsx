@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Loader } from '~/src/components/Loader';
 import { UserLine } from '~/src/components/UserLine';
@@ -25,8 +26,11 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-4">
       <h1 className="text-4xl font-bold">Users</h1>
+      <Link href="/users/new" className="bg-blue-600 p-2 w-fit rounded-full">
+        New user
+      </Link>
       <ul className="flex flex-col gap-2">
         {data.users.map((user) => (
           <UserLine key={user.id} user={user} />
