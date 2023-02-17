@@ -5,12 +5,12 @@ import { Loader } from '~/src/components/Loader';
 import { PostsResponseSchema } from '~/src/schema/post.schema';
 import { UserResponseSchema } from '~/src/schema/user.schema';
 
-const getUser = (userId: string) =>
+const getUser = (userId: number) =>
   fetch(`/api/users/${userId}`)
     .then((res) => res.json())
     .then(UserResponseSchema.parse);
 
-const getUserPosts = (userId: string) =>
+const getUserPosts = (userId: number) =>
   fetch(`/api/users/${userId}/posts`)
     .then((res) => res.json())
     .then(PostsResponseSchema.parse);
@@ -18,11 +18,12 @@ const getUserPosts = (userId: string) =>
 export default function UserPage() {
   const router = useRouter();
 
-  const userId = router.query.userId as string;
+  const userId = router.query.userId;
 
   const { data, isLoading, isError } = useQuery({
+    enabled: Boolean(userId),
     queryKey: ['users', userId],
-    queryFn: () => getUser(userId),
+    queryFn: () => getUser(Number(userId)),
   });
 
   const {
@@ -30,9 +31,9 @@ export default function UserPage() {
     isLoading: postsLoading,
     isError: postsError,
   } = useQuery({
-    enabled: !isLoading,
+    enabled: Boolean(userId),
     queryKey: ['users', userId, 'posts'],
-    queryFn: () => getUserPosts(userId),
+    queryFn: () => getUserPosts(Number(userId)),
   });
 
   if (isLoading) {
