@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Loader } from '~/src/components/Loader';
@@ -12,45 +11,6 @@ const getUsers = async () =>
     .then(UsersResponseSchema.parse);
 
 export default function Home() {
-  const { data, isLoading, isError } = useQuery({
-    queryFn: getUsers,
-    queryKey: ['users'],
-  });
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError) {
-    return <div>Something went wrong</div>;
-  }
-
-  return (
-    <div className="flex flex-col gap-4 p-4">
-      <h1 className="text-4xl font-bold">Users</h1>
-      <Link href="/users/new" className="bg-blue-600 p-2 w-fit rounded-full">
-        New user
-      </Link>
-      <ul className="flex flex-col gap-2">
-        {data.users.map((user) => (
-          <UserLine key={user.id} user={user} />
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-// Without useQuery
-// Et la on ne gère pas :
-/**
- * Cache management
- * Error management (store error)
- * Cancel request
- * Retry request
- * etc..
- */
-
-const HomeTest = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -72,6 +32,9 @@ const HomeTest = () => {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-4xl font-bold">Users</h1>
+      <Link href="/users/new" className="bg-blue-600 p-2 w-fit rounded-full">
+        New user
+      </Link>
       {isLoading && <Loader />}
       {isError && <div>Something went wrong</div>}
       <ul className="flex flex-col gap-2">
@@ -81,4 +44,4 @@ const HomeTest = () => {
       </ul>
     </div>
   );
-};
+}
